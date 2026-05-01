@@ -6,18 +6,20 @@ ROOT = Path(__file__).resolve().parent.parent
 INPUT_CSV = ROOT / "data" / "neo_v2.csv"
 OUTPUT_CSV = ROOT / "data" / "neo_preprocessed.csv"
 
-DROP_ID_NAME_BODY_SENTRY = ["id", "name", "orbiting_body", "sentry_object"]
+DROP_NAME_BODY_SENTRY = ["name", "orbiting_body", "sentry_object"]
 DROP_REDUNDANT_DIAMETER = "est_diameter_max"
 
 
 def preprocess_neo(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
-    missing = [c for c in DROP_ID_NAME_BODY_SENTRY if c not in out.columns]
+    missing = [c for c in DROP_NAME_BODY_SENTRY if c not in out.columns]
     if missing:
         raise ValueError(f"Expected columns missing from input: {missing}")
     if DROP_REDUNDANT_DIAMETER not in out.columns:
         raise ValueError(f"Expected column {DROP_REDUNDANT_DIAMETER!r} not in input.")
-    out = out.drop(columns=DROP_ID_NAME_BODY_SENTRY + [DROP_REDUNDANT_DIAMETER])
+    out = out.drop(columns=DROP_NAME_BODY_SENTRY + [DROP_REDUNDANT_DIAMETER])
+    max_diameters = out.groupby("id")["est_diameter_min"].max().nlargest(2).index
+    out = out[~out["id"].isin(max_diameters)]
     return out
 
 

@@ -3,7 +3,7 @@ name = "lista-4-projekt-grupowy-1"
 version = "0.1.0"
 description = "Projekt grupowy na MLa"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "matplotlib>=3.10.9",
     "numpy>=2.4.4",
@@ -14,6 +14,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "ipykernel>=6.29.5",
     "pre-commit>=4.6.0",
     "ruff>=0.15.12",
 ]
