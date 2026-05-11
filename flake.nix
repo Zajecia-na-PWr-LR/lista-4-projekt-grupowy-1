@@ -12,6 +12,7 @@
 
     in {
       devShells.${system}.default = pkgs.mkJupyterShell {
+        python = pkgs.python312;
         packages = ps: with ps; [
           pandas
           pandas-stubs
